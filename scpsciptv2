@@ -1,0 +1,1305 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+       Name = "SCP Roleplay Script Made By RoScripts Ultimate",
+   LoadingTitle = "SCP Roleplay Script",
+   LoadingSubtitle = "Made By RoScripts Ultimate",
+   ConfigurationSaving = {
+      Enabled = false,
+      FolderName = nil, -- Create a custom folder for your hub/game
+      FileName = "E39SCPB"
+   },
+   Discord = {
+      Enabled = false,
+      Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
+      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+   },
+   KeySystem = true, -- Set this to true to use our key system
+   KeySettings = {
+      Title = "SCP Roleplay Script",
+      Subtitle = "https://discord.gg/Cd3B4fYsZB",
+      Note = "The key can be found in the RoScripts Ultimate Discord",
+      FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+      SaveKey = false, -- The user's key will be saved, but if you change the key, they will be unable to use your script
+      GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+      Key = {"ROSCRIPTSULTIMATESCPSCRIPTKEY2493"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+   }
+})
+
+local MainTab = Window:CreateTab("Main", 4483362458) -- Title, Image
+local MainSection = MainTab:CreateSection("Main")
+
+
+local Toggle1 = MainTab:CreateToggle({
+   Name = "Anti AFK",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+local vu = game:GetService("VirtualUser")
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+wait(1)
+vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+end)
+   end,
+})
+
+
+local Toggle3 = MainTab:CreateToggle({
+   Name = "FullBright",
+   CurrentValue = false,
+   Flag = "Toggle2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+if not _G.FullBrightExecuted then
+
+	_G.FullBrightEnabled = false
+
+	_G.NormalLightingSettings = {
+		Brightness = game:GetService("Lighting").Brightness,
+		ClockTime = game:GetService("Lighting").ClockTime,
+		FogEnd = game:GetService("Lighting").FogEnd,
+		GlobalShadows = game:GetService("Lighting").GlobalShadows,
+		Ambient = game:GetService("Lighting").Ambient
+	}
+
+	game:GetService("Lighting"):GetPropertyChangedSignal("Brightness"):Connect(function()
+		if game:GetService("Lighting").Brightness ~= 1 and game:GetService("Lighting").Brightness ~= _G.NormalLightingSettings.Brightness then
+			_G.NormalLightingSettings.Brightness = game:GetService("Lighting").Brightness
+			if not _G.FullBrightEnabled then
+				repeat
+					wait()
+				until _G.FullBrightEnabled
+			end
+			game:GetService("Lighting").Brightness = 1
+		end
+	end)
+
+	game:GetService("Lighting"):GetPropertyChangedSignal("ClockTime"):Connect(function()
+		if game:GetService("Lighting").ClockTime ~= 12 and game:GetService("Lighting").ClockTime ~= _G.NormalLightingSettings.ClockTime then
+			_G.NormalLightingSettings.ClockTime = game:GetService("Lighting").ClockTime
+			if not _G.FullBrightEnabled then
+				repeat
+					wait()
+				until _G.FullBrightEnabled
+			end
+			game:GetService("Lighting").ClockTime = 12
+		end
+	end)
+
+	game:GetService("Lighting"):GetPropertyChangedSignal("FogEnd"):Connect(function()
+		if game:GetService("Lighting").FogEnd ~= 786543 and game:GetService("Lighting").FogEnd ~= _G.NormalLightingSettings.FogEnd then
+			_G.NormalLightingSettings.FogEnd = game:GetService("Lighting").FogEnd
+			if not _G.FullBrightEnabled then
+				repeat
+					wait()
+				until _G.FullBrightEnabled
+			end
+			game:GetService("Lighting").FogEnd = 786543
+		end
+	end)
+
+	game:GetService("Lighting"):GetPropertyChangedSignal("GlobalShadows"):Connect(function()
+		if game:GetService("Lighting").GlobalShadows ~= false and game:GetService("Lighting").GlobalShadows ~= _G.NormalLightingSettings.GlobalShadows then
+			_G.NormalLightingSettings.GlobalShadows = game:GetService("Lighting").GlobalShadows
+			if not _G.FullBrightEnabled then
+				repeat
+					wait()
+				until _G.FullBrightEnabled
+			end
+			game:GetService("Lighting").GlobalShadows = false
+		end
+	end)
+
+	game:GetService("Lighting"):GetPropertyChangedSignal("Ambient"):Connect(function()
+		if game:GetService("Lighting").Ambient ~= Color3.fromRGB(178, 178, 178) and game:GetService("Lighting").Ambient ~= _G.NormalLightingSettings.Ambient then
+			_G.NormalLightingSettings.Ambient = game:GetService("Lighting").Ambient
+			if not _G.FullBrightEnabled then
+				repeat
+					wait()
+				until _G.FullBrightEnabled
+			end
+			game:GetService("Lighting").Ambient = Color3.fromRGB(178, 178, 178)
+		end
+	end)
+
+	game:GetService("Lighting").Brightness = 1
+	game:GetService("Lighting").ClockTime = 12
+	game:GetService("Lighting").FogEnd = 786543
+	game:GetService("Lighting").GlobalShadows = false
+	game:GetService("Lighting").Ambient = Color3.fromRGB(178, 178, 178)
+
+	local LatestValue = true
+	spawn(function()
+		repeat
+			wait()
+		until _G.FullBrightEnabled
+		while wait() do
+			if _G.FullBrightEnabled ~= LatestValue then
+				if not _G.FullBrightEnabled then
+					game:GetService("Lighting").Brightness = _G.NormalLightingSettings.Brightness
+					game:GetService("Lighting").ClockTime = _G.NormalLightingSettings.ClockTime
+					game:GetService("Lighting").FogEnd = _G.NormalLightingSettings.FogEnd
+					game:GetService("Lighting").GlobalShadows = _G.NormalLightingSettings.GlobalShadows
+					game:GetService("Lighting").Ambient = _G.NormalLightingSettings.Ambient
+				else
+					game:GetService("Lighting").Brightness = 1
+					game:GetService("Lighting").ClockTime = 12
+					game:GetService("Lighting").FogEnd = 786543
+					game:GetService("Lighting").GlobalShadows = false
+					game:GetService("Lighting").Ambient = Color3.fromRGB(178, 178, 178)
+				end
+				LatestValue = not LatestValue
+			end
+		end
+	end)
+end
+
+_G.FullBrightExecuted = true
+_G.FullBrightEnabled = not _G.FullBrightEnabled
+   end,
+})
+
+local Tab22 = Window:CreateTab("Teleports", 4483362458) -- Title, Image
+local Section = Tab22:CreateSection(" ")
+
+local Button = Tab22:CreateButton({
+   Name = "Class D Cells",
+   Callback = function()
+local teleport_table = {
+    location1 = Vector3.new(-31, 23, 328), -- your desired position
+
+}
+
+local tween_s = game:GetService('TweenService')
+local tweeninfo = TweenInfo.new(0,Enum.EasingStyle.Linear)
+
+local lp = game.Players.LocalPlayer
+
+function bypass_teleport(v)
+    if lp.Character and 
+    lp.Character:FindFirstChild('HumanoidRootPart') then
+        local cf = CFrame.new(v)
+        local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
+        a:Play()
+        -- a.Completed:Wait()
+        -- print('Teleporting Done!')
+    end
+end
+
+bypass_teleport(teleport_table.location1)
+   end,
+})
+
+local Button = Tab22:CreateButton({
+   Name = "Sector 1",
+   Callback = function()
+   local teleport_table = {
+    location1 = Vector3.new(-320, 23, 17), -- your desired position
+
+}
+
+local tween_s = game:GetService('TweenService')
+local tweeninfo = TweenInfo.new(0,Enum.EasingStyle.Linear)
+
+local lp = game.Players.LocalPlayer
+
+function bypass_teleport(v)
+    if lp.Character and 
+    lp.Character:FindFirstChild('HumanoidRootPart') then
+        local cf = CFrame.new(v)
+        local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
+        a:Play()
+        -- a.Completed:Wait()
+        -- print('Teleporting Done!')
+    end
+end
+
+bypass_teleport(teleport_table.location1)
+   end,
+})
+
+local Button = Tab22:CreateButton({
+   Name = "Sector 2",
+   Callback = function()
+   local teleport_table = {
+    location1 = Vector3.new(-32, 23, 56), -- your desired position
+
+}
+
+local tween_s = game:GetService('TweenService')
+local tweeninfo = TweenInfo.new(0,Enum.EasingStyle.Linear)
+
+local lp = game.Players.LocalPlayer
+
+function bypass_teleport(v)
+    if lp.Character and 
+    lp.Character:FindFirstChild('HumanoidRootPart') then
+        local cf = CFrame.new(v)
+        local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
+        a:Play()
+        -- a.Completed:Wait()
+        -- print('Teleporting Done!')
+    end
+end
+
+bypass_teleport(teleport_table.location1)
+   end,
+})
+
+local Button = Tab22:CreateButton({
+   Name = "Sector 3",
+   Callback = function()
+local teleport_table = {
+    location1 = Vector3.new(237, 23, -9), -- your desired position
+
+}
+
+local tween_s = game:GetService('TweenService')
+local tweeninfo = TweenInfo.new(0,Enum.EasingStyle.Linear)
+
+local lp = game.Players.LocalPlayer
+
+function bypass_teleport(v)
+    if lp.Character and 
+    lp.Character:FindFirstChild('HumanoidRootPart') then
+        local cf = CFrame.new(v)
+        local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
+        a:Play()
+        -- a.Completed:Wait()
+        -- print('Teleporting Done!')
+    end
+end
+
+bypass_teleport(teleport_table.location1)
+   end,
+})
+
+local Button = Tab22:CreateButton({
+   Name = "Helipad",
+   Callback = function()
+local teleport_table = {
+    location1 = Vector3.new(-816, 23, 16), -- your desired position
+
+}
+
+local tween_s = game:GetService('TweenService')
+local tweeninfo = TweenInfo.new(0,Enum.EasingStyle.Linear)
+
+local lp = game.Players.LocalPlayer
+
+function bypass_teleport(v)
+    if lp.Character and 
+    lp.Character:FindFirstChild('HumanoidRootPart') then
+        local cf = CFrame.new(v)
+        local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
+        a:Play()
+        -- a.Completed:Wait()
+        -- print('Teleporting Done!')
+    end
+end
+
+bypass_teleport(teleport_table.location1)
+   end,
+})
+
+local Button = Tab22:CreateButton({
+   Name = "Bunker",
+   Callback = function()
+   local teleport_table = {
+    location1 = Vector3.new(-168, -7, -146), -- your desired position
+
+}
+
+local tween_s = game:GetService('TweenService')
+local tweeninfo = TweenInfo.new(0,Enum.EasingStyle.Linear)
+
+local lp = game.Players.LocalPlayer
+
+function bypass_teleport(v)
+    if lp.Character and 
+    lp.Character:FindFirstChild('HumanoidRootPart') then
+        local cf = CFrame.new(v)
+        local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
+        a:Play()
+        -- a.Completed:Wait()
+        -- print('Teleporting Done!')
+    end
+end
+
+bypass_teleport(teleport_table.location1)
+   end,
+})
+
+local Tab11 = Window:CreateTab("Combat", 4483362458) -- Title, Image
+local Section11 = Tab11:CreateSection("Combat")
+
+local Button = MainTab:CreateButton({
+   Name = "Enable Noclip",
+   Callback = function()
+   
+if _G.Noclip == nil or not _G.Noclip.Connected then
+lp = game:service'Players'.LocalPlayer
+_G.Noclip = game:service'RunService'.Stepped:Connect(function()
+lp.Character.Head.CanCollide = false
+lp.Character.LowerTorso.CanCollide = false
+lp.Character.UpperTorso.CanCollide = false
+lp.Character.HumanoidRootPart.CanCollide = false
+if lp.Character:FindFirstChild'Badge' then
+lp.Character.Badge.CanCollide = false
+end
+end)
+end
+   end,
+})
+
+
+local Button1 = Tab11:CreateButton({
+   Name = "ESP",
+   Callback = function()
+   HightLightPlayer = function(Player)
+    
+    local Character = Player.Character or Player.CharacterAdded:Wait()
+    local Humanoid = Character:WaitForChild("Humanoid")
+    local HightLighter = Instance.new("Highlight", Character)
+    HightLighter.FillColor = (Player.TeamColor and Player.TeamColor.Color) or Color3.fromRGB(255, 48, 51)
+    
+    Humanoid.Changed:Connect(function()
+        if Humanoid.Health <= 0 then
+            HightLighter:Remove()
+        end
+    end)
+end
+
+HightLightFunc = function(Player)
+    if Player.Character then
+        HightLightPlayer(Player)
+    end
+    Player.CharacterAdded:Connect(function()
+        HightLightPlayer(Player)
+    end)
+end
+
+local Players = game:GetService("Players")
+for _, PLayer in next, Players:GetPlayers() do
+    HightLightFunc(PLayer)
+end
+Players.PlayerAdded:Connect(function(Player)
+    HightLightFunc(Player)
+end)
+   end,
+})
+
+local Button2 = Tab11:CreateButton({
+   Name = "Expand Head Hitbox",
+   Callback = function()
+   local function modifyHead(player)
+    if player == game.Players.LocalPlayer then
+        return 
+    end
+
+    local character = player.Character
+    if character then
+        local head = character:FindFirstChild("Head")
+        if head then
+
+            head.Size = Vector3.new(3.3, 3.3, 3.3) 
+
+            local mesh = head:FindFirstChildOfClass("SpecialMesh")
+            if mesh then
+                mesh.Scale = Vector3.new(1.5, 1.5, 1.5)  
+            end
+
+            local teamColor = player.TeamColor
+            if teamColor then
+                head.BrickColor = BrickColor.new(teamColor.Color)  
+            else
+                head.BrickColor = BrickColor.new("White")  
+            end
+
+            head.Transparency = '0.9'
+        end
+    end
+end
+
+local function updateHeads()
+    for _, player in ipairs(game.Players:GetPlayers()) do
+        modifyHead(player)
+    end
+end
+
+updateHeads()
+while true do
+    wait(3)
+    updateHeads()
+end
+            
+   end,
+})
+
+local Button = Tab22:CreateButton({
+   Name = "CI Spawn (wait 10 seconds before entering the spawn area)",
+   Callback = function()
+   local teleport_table = {
+    location1 = Vector3.new(90, 96, 10), -- your desired position
+
+}
+
+local tween_s = game:GetService('TweenService')
+local tweeninfo = TweenInfo.new(0,Enum.EasingStyle.Linear)
+
+local lp = game.Players.LocalPlayer
+
+function bypass_teleport(v)
+    if lp.Character and 
+    lp.Character:FindFirstChild('HumanoidRootPart') then
+        local cf = CFrame.new(v)
+        local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
+        a:Play()
+        -- a.Completed:Wait()
+        -- print('Teleporting Done!')
+    end
+end
+
+bypass_teleport(teleport_table.location1)
+   end,
+})
+
+local CreditsTab = Window:CreateTab("Credits", 4483362458) -- Title, Image
+local Section = CreditsTab:CreateSection("Discord & Youtube Links")
+
+local Button = CreditsTab:CreateButton({
+   Name = "Click To Copy Discord Link",
+   Callback = function()
+   setclipboard("https://discord.gg/Cd3B4fYsZB")
+   toclipboard("https://discord.gg/Cd3B4fYsZB")
+   end,
+})
+
+local Button = CreditsTab:CreateButton({
+   Name = "Click To Copy Youtube Link",
+   Callback = function()
+   setclipboard("https://www.youtube.com/channel/UC4aqervDhCnACsPrihGfD-g")
+   toclipboard("https://www.youtube.com/channel/UC4aqervDhCnACsPrihGfD-g")
+   end,
+})
+
+
+
+local Button = Tab22:CreateButton({
+   Name = "SCP-096",
+   Callback = function()
+   local teleport_table = {
+    location1 = Vector3.new(502, 23, -330), -- your desired position
+
+}
+
+local tween_s = game:GetService('TweenService')
+local tweeninfo = TweenInfo.new(0,Enum.EasingStyle.Linear)
+
+local lp = game.Players.LocalPlayer
+
+function bypass_teleport(v)
+    if lp.Character and 
+    lp.Character:FindFirstChild('HumanoidRootPart') then
+        local cf = CFrame.new(v)
+        local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
+        a:Play()
+        -- a.Completed:Wait()
+        -- print('Teleporting Done!')
+    end
+end
+
+bypass_teleport(teleport_table.location1)
+   end,
+})
+
+local Button = Tab22:CreateButton({
+   Name = "SCP-002",
+   Callback = function()
+   local teleport_table = {
+    location1 = Vector3.new(593, 23, -40), -- your desired position
+
+}
+
+local tween_s = game:GetService('TweenService')
+local tweeninfo = TweenInfo.new(0,Enum.EasingStyle.Linear)
+
+local lp = game.Players.LocalPlayer
+
+function bypass_teleport(v)
+    if lp.Character and 
+    lp.Character:FindFirstChild('HumanoidRootPart') then
+        local cf = CFrame.new(v)
+        local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
+        a:Play()
+        -- a.Completed:Wait()
+        -- print('Teleporting Done!')
+    end
+end
+
+bypass_teleport(teleport_table.location1)
+   end,
+})
+
+local Button = Tab22:CreateButton({
+   Name = "SCP-008",
+   Callback = function()
+   local teleport_table = {
+    location1 = Vector3.new(378, 23, 100), -- your desired position
+
+}
+
+local tween_s = game:GetService('TweenService')
+local tweeninfo = TweenInfo.new(0,Enum.EasingStyle.Linear)
+
+local lp = game.Players.LocalPlayer
+
+function bypass_teleport(v)
+    if lp.Character and 
+    lp.Character:FindFirstChild('HumanoidRootPart') then
+        local cf = CFrame.new(v)
+        local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
+        a:Play()
+        -- a.Completed:Wait()
+        -- print('Teleporting Done!')
+    end
+end
+
+bypass_teleport(teleport_table.location1)
+   end,
+})
+
+local Button = Tab22:CreateButton({
+   Name = "SCP-173",
+   Callback = function()
+   local teleport_table = {
+    location1 = Vector3.new(224, 23, 97), -- your desired position
+
+}
+
+local tween_s = game:GetService('TweenService')
+local tweeninfo = TweenInfo.new(0,Enum.EasingStyle.Linear)
+
+local lp = game.Players.LocalPlayer
+
+function bypass_teleport(v)
+    if lp.Character and 
+    lp.Character:FindFirstChild('HumanoidRootPart') then
+        local cf = CFrame.new(v)
+        local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
+        a:Play()
+        -- a.Completed:Wait()
+        -- print('Teleporting Done!')
+    end
+end
+
+bypass_teleport(teleport_table.location1)
+   end,
+})
+
+local Button = MainTab:CreateButton({
+   Name = "Activate Press E To Fly",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+-- LocalScript
+
+local UIS = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+local flying = false
+local flySpeed = 50
+local bodyVelocity
+
+-- Toggle fly function
+local function toggleFly()
+    flying = not flying
+
+    if flying then
+        humanoidRootPart.Anchored = false
+        bodyVelocity = Instance.new("BodyVelocity")
+        bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+        bodyVelocity.MaxForce = Vector3.new(4000, 4000, 4000)
+        bodyVelocity.Parent = humanoidRootPart
+    else
+        if bodyVelocity then
+            bodyVelocity:Destroy()
+        end
+    end
+end
+
+-- Handle key press
+UIS.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+
+    if input.KeyCode == Enum.KeyCode.E then
+        toggleFly()
+    end
+end)
+
+-- Update loop for movement and flying
+RunService.RenderStepped:Connect(function()
+    local moveDirection = Vector3.new(
+        (UIS:IsKeyDown(Enum.KeyCode.W) and 1 or 0) - (UIS:IsKeyDown(Enum.KeyCode.S) and 1 or 0),
+        (UIS:IsKeyDown(Enum.KeyCode.Space) and 1 or 0) - (UIS:IsKeyDown(Enum.KeyCode.LeftShift) and 1 or 0),
+        (UIS:IsKeyDown(Enum.KeyCode.D) and 1 or 0) - (UIS:IsKeyDown(Enum.KeyCode.A) and 1 or 0)
+    )
+
+    local cameraCFrame = workspace.CurrentCamera.CFrame
+
+    if flying then
+        local direction = (cameraCFrame.LookVector * moveDirection.X) + (Vector3.new(0, 1, 0) * moveDirection.Y)
+        bodyVelocity.Velocity = direction * flySpeed
+    else
+        local moveVector = (cameraCFrame.LookVector * moveDirection.X) + (cameraCFrame.RightVector * moveDirection.Z)
+        humanoidRootPart.CFrame = humanoidRootPart.CFrame + moveVector * 0.3 -- Adjust the speed as needed
+    end
+end)
+   end,
+})  
+
+local Button = MainTab:CreateButton({
+   Name = "Teleport To Random Player",
+   CurrentValue = false,
+   Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local team = player.Team
+
+local function getRandomOpponent()
+    local opponents = {}
+    for _, otherPlayer in ipairs(Players:GetPlayers()) do
+        if otherPlayer ~= player and otherPlayer.Team ~= team then
+            table.insert(opponents, otherPlayer)
+        end
+    end
+
+    if #opponents > 0 then
+        return opponents[math.random(1, #opponents)]
+    end
+    return nil
+end
+
+local function teleportToRandomOpponent()
+    local targetPlayer = getRandomOpponent()
+    if targetPlayer and targetPlayer.Character and targetPlayer.Character.PrimaryPart then
+        local targetPosition = targetPlayer.Character.PrimaryPart.Position
+        local targetCFrame = CFrame.new(targetPosition)
+
+        local tween = TweenService:Create(
+            character.PrimaryPart,
+            TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+            {CFrame = targetCFrame}
+        )
+
+        tween:Play()
+    end
+end
+
+-- Execute teleportation once on script run
+teleportToRandomOpponent()
+   end,
+})       
+
+local Slider = MainTab:CreateSlider({
+   Name = "Speed (Reset Everytime If Changed)",
+   Range = {0, 3},
+   Increment = 0.10,
+   Suffix = "Boost",
+   CurrentValue = 0,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+-- Variables
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+local userInputService = game:GetService("UserInputService")
+
+-- Constants
+local BOOST_AMOUNT = (Value)  -- Amount to boost per interval
+local INTERVAL = 0.2     -- Interval between boosts in seconds
+
+-- State variables
+local boosting = false
+local boostLoopId = nil
+
+-- Function to start the boost loop
+local function startBoostLoop()
+    if boostLoopId then
+        return  -- Already running
+    end
+    
+    boostLoopId = game:GetService("RunService").Heartbeat:Connect(function()
+        if boosting then
+            local delta = humanoid.MoveDirection * BOOST_AMOUNT
+            character:SetPrimaryPartCFrame(character.PrimaryPart.CFrame + delta)
+        else
+            stopBoostLoop()
+        end
+    end)
+end
+
+-- Function to stop the boost loop
+local function stopBoostLoop()
+    if boostLoopId then
+        boostLoopId:Disconnect()
+        boostLoopId = nil
+    end
+end
+
+-- Connect key press and release events for all movement keys
+local movementKeys = {
+    Enum.KeyCode.W,
+    Enum.KeyCode.A,
+    Enum.KeyCode.S,
+    Enum.KeyCode.D
+}
+
+for _, key in ipairs(movementKeys) do
+    userInputService.InputBegan:Connect(function(input, isProcessed)
+        if input.KeyCode == key and not isProcessed then
+            boosting = true
+            startBoostLoop()
+        end
+    end)
+    
+    userInputService.InputEnded:Connect(function(input)
+        if input.KeyCode == key then
+            boosting = false
+        end
+    end)
+end
+
+   end,
+})
+
+local Button = Tab22:CreateButton({
+   Name = "Control Room",
+   Callback = function()
+   local teleport_table = {
+    location1 = Vector3.new(-56, 17, -109), -- your desired position
+
+}
+
+local tween_s = game:GetService('TweenService')
+local tweeninfo = TweenInfo.new(0,Enum.EasingStyle.Linear)
+
+local lp = game.Players.LocalPlayer
+
+function bypass_teleport(v)
+    if lp.Character and 
+    lp.Character:FindFirstChild('HumanoidRootPart') then
+        local cf = CFrame.new(v)
+        local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
+        a:Play()
+        -- a.Completed:Wait()
+        -- print('Teleporting Done!')
+    end
+end
+
+bypass_teleport(teleport_table.location1)
+   end,
+})
+
+local Button = Tab22:CreateButton({
+   Name = "Transformers",
+   Callback = function()
+   local teleport_table = {
+    location1 = Vector3.new(-185, 19, -98), -- your desired position
+
+}
+
+local tween_s = game:GetService('TweenService')
+local tweeninfo = TweenInfo.new(0,Enum.EasingStyle.Linear)
+
+local lp = game.Players.LocalPlayer
+
+function bypass_teleport(v)
+    if lp.Character and 
+    lp.Character:FindFirstChild('HumanoidRootPart') then
+        local cf = CFrame.new(v)
+        local a = tween_s:Create(lp.Character.HumanoidRootPart,tweeninfo,{CFrame=cf})
+        a:Play()
+        -- a.Completed:Wait()
+        -- print('Teleporting Done!')
+    end
+end
+
+bypass_teleport(teleport_table.location1)
+   end,
+})
+
+local Button = MainTab:CreateButton({
+   Name = "Start Infection (NoClip Recommended)",
+   Callback = function()
+-- LocalScript placed in StarterPlayerScripts or similar
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+
+-- Function to teleport the player
+local function teleportToPosition(position)
+    HumanoidRootPart.CFrame = CFrame.new(position)
+end
+
+-- Function to get a random player that's not the local player
+local function getRandomPlayer(excludePlayers)
+    local availablePlayers = {}
+    for _, player in pairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer and not excludePlayers[player] then
+            table.insert(availablePlayers, player)
+        end
+    end
+    if #availablePlayers > 0 then
+        return availablePlayers[math.random(1, #availablePlayers)]
+    else
+        return nil
+    end
+end
+
+-- Initial coordinates to teleport to
+local initialPosition = Vector3.new(384, 2, 237)
+
+-- Teleport to the initial position and wait for 3 seconds
+teleportToPosition(initialPosition)
+wait(3)
+
+local excludePlayers = {}
+local durationPerPlayer = 5
+
+while true do
+    local targetPlayer = getRandomPlayer(excludePlayers)
+    if not targetPlayer then
+        break -- Break the loop if no players are left to teleport to
+    end
+
+    excludePlayers[targetPlayer] = true
+    local endTime = tick() + durationPerPlayer
+
+    while tick() < endTime do
+        if targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local targetPosition = targetPlayer.Character.HumanoidRootPart.Position
+            teleportToPosition(targetPosition)
+        end
+        wait(0)
+    end
+end
+
+   end,
+})
+
+local Section = MainTab:CreateSection("Hacks")
+
+local Button = MainTab:CreateButton({
+   Name = "No 008 Hack Device Cooldown",
+   Callback = function()
+   -- Reference the object with the current  "Sector 3"
+local sector3 = game.Workspace["Sector 3"]
+
+-- Check if Sector 3 exists
+if sector3 then
+    -- Reference the ModelCI002 within Sector 3
+    local modelCI002 = sector3.ModelCI008
+    
+    -- Check if ModelCI002 exists
+    if modelCI002 then
+        -- Find the specific part using its full path
+        local cylinder = modelCI002:FindFirstChild("Meshes/Chaos Insurgency Hack Device_Cylinder")
+        
+        -- Check if cylinder part exists
+        if cylinder then
+            -- Find the CIHackDevicePrompt part within Chaos Insurgency Hack Device_Cylinder
+            local prompt = cylinder:FindFirstChild("CIHackDevicePrompt")
+            
+            -- Check if CIHackDevicePrompt exists
+            if prompt then
+                -- Re the CIHackDevicePrompt to a new 
+                prompt.HoldDuration = 1
+            else
+                warn("CIHackDevicePrompt part does not exist in Meshes/Chaos Insurgency Hack Device_Cylinder.")
+            end
+        else
+            warn("Meshes/Chaos Insurgency Hack Device_Cylinder part does not exist in ModelCI002.")
+        end
+    else
+        warn("ModelCI002 does not exist in Sector 3.")
+    end
+else
+    warn("Sector 3 does not exist in Workspace.")
+end
+
+----------------------------------------------------------------------------------
+
+-- Reference the object with the current  "Sector 3"
+local sector3 = game.Workspace["Sector 3"]
+
+-- Check if Sector 3 exists
+if sector3 then
+    -- Reference the ModelCI002 within Sector 3
+    local modelCI002 = sector3.ModelCI008
+    
+    -- Check if ModelCI002 exists
+    if modelCI002 then
+        -- Find the specific part using its full path
+        local cylinder = modelCI002:FindFirstChild("Meshes/Chaos Insurgency Hack Device_Cylinder")
+        
+        -- Check if cylinder part exists
+        if cylinder then
+            -- Find the CIHackDevicePrompt part within Chaos Insurgency Hack Device_Cylinder
+            local prompt = cylinder:FindFirstChild("CIHackDevicePrompt")
+            
+            -- Check if CIHackDevicePrompt exists
+            if prompt then
+                -- Re the CIHackDevicePrompt to a new 
+                prompt.KeyboardKeyCode = "B"
+            else
+                warn("CIHackDevicePrompt part does not exist in Meshes/Chaos Insurgency Hack Device_Cylinder.")
+            end
+        else
+            warn("Meshes/Chaos Insurgency Hack Device_Cylinder part does not exist in ModelCI002.")
+        end
+    else
+        warn("ModelCI002 does not exist in Sector 3.")
+    end
+else
+    warn("Sector 3 does not exist in Workspace.")
+end
+
+--------------------------------------------------------------------------------------
+
+-- Reference the object with the current  "Sector 3"
+local sector3 = game.Workspace["Sector 3"]
+
+-- Check if Sector 3 exists
+if sector3 then
+    -- Reference the ModelCI002 within Sector 3
+    local modelCI002 = sector3.ModelCI008
+    
+    -- Check if ModelCI002 exists
+    if modelCI002 then
+        -- Find the specific part using its full path
+        local cylinder = modelCI002:FindFirstChild("Meshes/Chaos Insurgency Hack Device_Cylinder")
+        
+        -- Check if cylinder part exists
+        if cylinder then
+            -- Find the CIHackDevicePrompt part within Chaos Insurgency Hack Device_Cylinder
+            local prompt = cylinder:FindFirstChild("CIHackDevicePrompt")
+            
+            -- Check if CIHackDevicePrompt exists
+            if prompt then
+                -- Re the CIHackDevicePrompt to a new 
+                prompt.ActionText = "Use B"
+            else
+                warn("CIHackDevicePrompt part does not exist in Meshes/Chaos Insurgency Hack Device_Cylinder.")
+            end
+        else
+            warn("Meshes/Chaos Insurgency Hack Device_Cylinder part does not exist in ModelCI002.")
+        end
+    else
+        warn("ModelCI002 does not exist in Sector 3.")
+    end
+else
+    warn("Sector 3 does not exist in Workspace.")
+end
+
+   end,
+})
+
+local Button = MainTab:CreateButton({
+   Name = "No 002 Hack Device Cooldown",
+   Callback = function()
+   -- Reference the object with the current  "Sector 3"
+local sector3 = game.Workspace["Sector 3"]
+
+-- Check if Sector 3 exists
+if sector3 then
+    -- Reference the ModelCI002 within Sector 3
+    local modelCI002 = sector3.ModelCI002
+    
+    -- Check if ModelCI002 exists
+    if modelCI002 then
+        -- Find the specific part using its full path
+        local cylinder = modelCI002:FindFirstChild("Meshes/Chaos Insurgency Hack Device_Cylinder")
+        
+        -- Check if cylinder part exists
+        if cylinder then
+            -- Find the CIHackDevicePrompt part within Chaos Insurgency Hack Device_Cylinder
+            local prompt = cylinder:FindFirstChild("CIHackDevicePrompt")
+            
+            -- Check if CIHackDevicePrompt exists
+            if prompt then
+                -- Re the CIHackDevicePrompt to a new 
+                prompt.HoldDuration = 1
+            else
+                warn("CIHackDevicePrompt part does not exist in Meshes/Chaos Insurgency Hack Device_Cylinder.")
+            end
+        else
+            warn("Meshes/Chaos Insurgency Hack Device_Cylinder part does not exist in ModelCI002.")
+        end
+    else
+        warn("ModelCI002 does not exist in Sector 3.")
+    end
+else
+    warn("Sector 3 does not exist in Workspace.")
+end
+
+----------------------------------------------------------------------------------
+
+-- Reference the object with the current  "Sector 3"
+local sector3 = game.Workspace["Sector 3"]
+
+-- Check if Sector 3 exists
+if sector3 then
+    -- Reference the ModelCI002 within Sector 3
+    local modelCI002 = sector3.ModelCI002
+    
+    -- Check if ModelCI002 exists
+    if modelCI002 then
+        -- Find the specific part using its full path
+        local cylinder = modelCI002:FindFirstChild("Meshes/Chaos Insurgency Hack Device_Cylinder")
+        
+        -- Check if cylinder part exists
+        if cylinder then
+            -- Find the CIHackDevicePrompt part within Chaos Insurgency Hack Device_Cylinder
+            local prompt = cylinder:FindFirstChild("CIHackDevicePrompt")
+            
+            -- Check if CIHackDevicePrompt exists
+            if prompt then
+                -- Re the CIHackDevicePrompt to a new 
+                prompt.KeyboardKeyCode = "B"
+            else
+                warn("CIHackDevicePrompt part does not exist in Meshes/Chaos Insurgency Hack Device_Cylinder.")
+            end
+        else
+            warn("Meshes/Chaos Insurgency Hack Device_Cylinder part does not exist in ModelCI002.")
+        end
+    else
+        warn("ModelCI002 does not exist in Sector 3.")
+    end
+else
+    warn("Sector 3 does not exist in Workspace.")
+end
+
+--------------------------------------------------------------------------------------
+
+-- Reference the object with the current  "Sector 3"
+local sector3 = game.Workspace["Sector 3"]
+
+-- Check if Sector 3 exists
+if sector3 then
+    -- Reference the ModelCI002 within Sector 3
+    local modelCI002 = sector3.ModelCI002
+    
+    -- Check if ModelCI002 exists
+    if modelCI002 then
+        -- Find the specific part using its full path
+        local cylinder = modelCI002:FindFirstChild("Meshes/Chaos Insurgency Hack Device_Cylinder")
+        
+        -- Check if cylinder part exists
+        if cylinder then
+            -- Find the CIHackDevicePrompt part within Chaos Insurgency Hack Device_Cylinder
+            local prompt = cylinder:FindFirstChild("CIHackDevicePrompt")
+            
+            -- Check if CIHackDevicePrompt exists
+            if prompt then
+                -- Re the CIHackDevicePrompt to a new 
+                prompt.ActionText = "Use B"
+            else
+                warn("CIHackDevicePrompt part does not exist in Meshes/Chaos Insurgency Hack Device_Cylinder.")
+            end
+        else
+            warn("Meshes/Chaos Insurgency Hack Device_Cylinder part does not exist in ModelCI002.")
+        end
+    else
+        warn("ModelCI002 does not exist in Sector 3.")
+    end
+else
+    warn("Sector 3 does not exist in Workspace.")
+end
+
+   end,
+})
+
+local Button = MainTab:CreateButton({
+   Name = "No 079 Hack Device Cooldown",
+   Callback = function()
+-- Reference the object with the current  "Sector 3"
+local sector3 = game.Workspace["Sector 3"]
+
+-- Check if Sector 3 exists
+if sector3 then
+    -- Reference the ModelCI002 within Sector 3
+    local modelCI002 = sector3.ModelCI079
+    
+    -- Check if ModelCI002 exists
+    if modelCI002 then
+        -- Find the specific part using its full path
+        local cylinder = modelCI002:FindFirstChild("Meshes/Chaos Insurgency Hack Device_Cylinder")
+        
+        -- Check if cylinder part exists
+        if cylinder then
+            -- Find the CIHackDevicePrompt part within Chaos Insurgency Hack Device_Cylinder
+            local prompt = cylinder:FindFirstChild("CIHackDevicePrompt")
+            
+            -- Check if CIHackDevicePrompt exists
+            if prompt then
+                -- Re the CIHackDevicePrompt to a new 
+                prompt.HoldDuration = 1
+            else
+                warn("CIHackDevicePrompt part does not exist in Meshes/Chaos Insurgency Hack Device_Cylinder.")
+            end
+        else
+            warn("Meshes/Chaos Insurgency Hack Device_Cylinder part does not exist in ModelCI002.")
+        end
+    else
+        warn("ModelCI002 does not exist in Sector 3.")
+    end
+else
+    warn("Sector 3 does not exist in Workspace.")
+end
+
+----------------------------------------------------------------------------------
+
+-- Reference the object with the current  "Sector 3"
+local sector3 = game.Workspace["Sector 3"]
+
+-- Check if Sector 3 exists
+if sector3 then
+    -- Reference the ModelCI002 within Sector 3
+    local modelCI002 = sector3.ModelCI079
+    
+    -- Check if ModelCI002 exists
+    if modelCI002 then
+        -- Find the specific part using its full path
+        local cylinder = modelCI002:FindFirstChild("Meshes/Chaos Insurgency Hack Device_Cylinder")
+        
+        -- Check if cylinder part exists
+        if cylinder then
+            -- Find the CIHackDevicePrompt part within Chaos Insurgency Hack Device_Cylinder
+            local prompt = cylinder:FindFirstChild("CIHackDevicePrompt")
+            
+            -- Check if CIHackDevicePrompt exists
+            if prompt then
+                -- Re the CIHackDevicePrompt to a new 
+                prompt.KeyboardKeyCode = "B"
+            else
+                warn("CIHackDevicePrompt part does not exist in Meshes/Chaos Insurgency Hack Device_Cylinder.")
+            end
+        else
+            warn("Meshes/Chaos Insurgency Hack Device_Cylinder part does not exist in ModelCI002.")
+        end
+    else
+        warn("ModelCI002 does not exist in Sector 3.")
+    end
+else
+    warn("Sector 3 does not exist in Workspace.")
+end
+
+--------------------------------------------------------------------------------------
+
+-- Reference the object with the current  "Sector 3"
+local sector3 = game.Workspace["Sector 3"]
+
+-- Check if Sector 3 exists
+if sector3 then
+    -- Reference the ModelCI002 within Sector 3
+    local modelCI002 = sector3.ModelCI079
+    
+    -- Check if ModelCI002 exists
+    if modelCI002 then
+        -- Find the specific part using its full path
+        local cylinder = modelCI002:FindFirstChild("Meshes/Chaos Insurgency Hack Device_Cylinder")
+        
+        -- Check if cylinder part exists
+        if cylinder then
+            -- Find the CIHackDevicePrompt part within Chaos Insurgency Hack Device_Cylinder
+            local prompt = cylinder:FindFirstChild("CIHackDevicePrompt")
+            
+            -- Check if CIHackDevicePrompt exists
+            if prompt then
+                -- Re the CIHackDevicePrompt to a new 
+                prompt.ActionText = "Use B"
+            else
+                warn("CIHackDevicePrompt part does not exist in Meshes/Chaos Insurgency Hack Device_Cylinder.")
+            end
+        else
+            warn("Meshes/Chaos Insurgency Hack Device_Cylinder part does not exist in ModelCI002.")
+        end
+    else
+        warn("ModelCI002 does not exist in Sector 3.")
+    end
+else
+    warn("Sector 3 does not exist in Workspace.")
+end
+
+
+   end,
+})
+
+local Button = Tab11:CreateButton({
+   Name = "Expand Body Hitbox",
+   Callback = function()
+   -- Define necessary services and variables
+local Players = game:GetService("Players")
+
+getgenv().HitboxSize = 3
+getgenv().HitboxTransparency = 0.9
+getgenv().HitboxStatus = false
+getgenv().TeamCheck = false
+
+-- Function to expand the hitbox of players
+local function ExpandHitbox()
+    local localPlayer = Players.LocalPlayer
+    local hitboxSize = getgenv().HitboxSize
+    local hitboxTransparency = getgenv().HitboxTransparency
+    local teamCheck = getgenv().TeamCheck
+
+    for _, player in pairs(Players:GetPlayers()) do
+        if player.Name ~= localPlayer.Name then
+            pcall(function()
+                if teamCheck and localPlayer.Team ~= player.Team then
+                    player.Character.HumanoidRootPart.Size = Vector3.new(hitboxSize, hitboxSize, hitboxSize)
+                    player.Character.HumanoidRootPart.Transparency = hitboxTransparency
+                    player.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really black")
+                    player.Character.HumanoidRootPart.Material = "Neon"
+                    player.Character.HumanoidRootPart.CanCollide = false
+                elseif not teamCheck then
+                    player.Character.HumanoidRootPart.Size = Vector3.new(hitboxSize, hitboxSize, hitboxSize)
+                    player.Character.HumanoidRootPart.Transparency = hitboxTransparency
+                    player.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really black")
+                    player.Character.HumanoidRootPart.Material = "Neon"
+                    player.Character.HumanoidRootPart.CanCollide = false
+                end
+            end)
+        end
+    end
+end
+
+-- Toggle function for Hitbox Status
+getgenv().HitboxStatus = true -- You can set this to true initially if needed
+
+-- Connect RenderStepped to expand hitboxes when HitboxStatus is true
+game:GetService('RunService').RenderStepped:Connect(function()
+    if getgenv().HitboxStatus then
+        ExpandHitbox()
+    end
+end)
+
+   end,
+})
+
+local Button = CreditsTab:CreateButton({
+   Name = "Click To Copy Bakr Discord Link",
+   Callback = function()
+   setclipboard("discord.gg/bakr9")
+   toclipboard("discord.gg/bakr9")
+   end,
+})
