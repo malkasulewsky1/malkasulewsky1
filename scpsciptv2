@@ -1429,3 +1429,29 @@ local Button = CreditsTab:CreateButton({
    end,
 })
 
+local MiscTab = Window:CreateTab("Misc", 4483362458) -- Title, Image
+local MiscSection = MiscTab:CreateSection("Misc")
+
+local Button = MiscTab:CreateButton({
+   Name = "Rejoin Current Server",
+   Callback = function()
+local TeleportService = game:GetService("TeleportService")
+local Players = game:GetService("Players")
+
+-- Get the current player
+local player = Players.LocalPlayer
+
+-- Function to rejoin the current server
+local function rejoinServer()
+    local currentPlaceId = game.PlaceId
+    local currentJobId = game.JobId
+
+    -- Teleport the player to the same server
+    TeleportService:TeleportToPlaceInstance(currentPlaceId, currentJobId, player)
+end
+
+-- Call the function to rejoin the server
+rejoinServer()
+
+   end,
+})
