@@ -333,61 +333,107 @@ bypass_teleport(teleport_table.location1)
 local Tab11 = Window:CreateTab("Combat", 4483362458) -- Title, Image
 local Section11 = Tab11:CreateSection("Combat")
 
-local Button = MainTab:CreateButton({
-   Name = "Enable Noclip",
-   Callback = function()
-   
-if _G.Noclip == nil or not _G.Noclip.Connected then
-lp = game:service'Players'.LocalPlayer
-_G.Noclip = game:service'RunService'.Stepped:Connect(function()
-lp.Character.Head.CanCollide = false
-lp.Character.LowerTorso.CanCollide = false
-lp.Character.UpperTorso.CanCollide = false
-lp.Character.HumanoidRootPart.CanCollide = false
-if lp.Character:FindFirstChild'Badge' then
-lp.Character.Badge.CanCollide = false
-end
-end)
-end
+local Toggle = MainTab:CreateToggle({
+   Name = "Noclip",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+       if Value then
+           -- Enable noclip
+           if _G.Noclip == nil or not _G.Noclip.Connected then
+               local lp = game:GetService('Players').LocalPlayer
+               _G.Noclip = game:GetService('RunService').Stepped:Connect(function()
+                   lp.Character.Head.CanCollide = false
+                   lp.Character.LowerTorso.CanCollide = false
+                   lp.Character.UpperTorso.CanCollide = false
+                   lp.Character.HumanoidRootPart.CanCollide = false
+                   if lp.Character:FindFirstChild('Badge') then
+                       lp.Character.Badge.CanCollide = false
+                   end
+               end)
+           end
+       else
+           -- Disable noclip
+           if _G.Noclip and _G.Noclip.Connected then
+               _G.Noclip:Disconnect()
+               _G.Noclip = nil
+               
+               -- Restore collision properties (assuming they were collidable before)
+               local lp = game:GetService('Players').LocalPlayer
+               local character = lp.Character
+               if character then
+                   character.Head.CanCollide = true
+                   character.LowerTorso.CanCollide = true
+                   character.UpperTorso.CanCollide = true
+                   character.HumanoidRootPart.CanCollide = true
+                   if character:FindFirstChild('Badge') then
+                       character.Badge.CanCollide = true
+                   end
+               end
+           end
+       end
    end,
 })
 
 
-local Button1 = Tab11:CreateButton({
-   Name = "ESP",
-   Callback = function()
-   HightLightPlayer = function(Player)
-    
-    local Character = Player.Character or Player.CharacterAdded:Wait()
-    local Humanoid = Character:WaitForChild("Humanoid")
-    local HightLighter = Instance.new("Highlight", Character)
-    HightLighter.FillColor = (Player.TeamColor and Player.TeamColor.Color) or Color3.fromRGB(255, 48, 51)
-    
-    Humanoid.Changed:Connect(function()
-        if Humanoid.Health <= 0 then
-            HightLighter:Remove()
+
+local Toggle = Tab11:CreateToggle({
+    Name = "ESP",
+    CurrentValue = false,
+    Flag = "Toggle1",
+    Callback = function(Value)
+        local HightLightPlayer
+        local HightLightFunc
+        local Players = game:GetService("Players")
+        
+        if Value then
+            -- Enable ESP
+            HightLightPlayer = function(Player)
+                local Character = Player.Character or Player.CharacterAdded:Wait()
+                local Humanoid = Character:WaitForChild("Humanoid")
+                local HightLighter = Instance.new("Highlight", Character)
+                HightLighter.FillColor = (Player.TeamColor and Player.TeamColor.Color) or Color3.fromRGB(255, 48, 51)
+                
+                Humanoid.Died:Connect(function()
+                    HightLighter:Remove()
+                end)
+            end
+            
+            HightLightFunc = function(Player)
+                if Player.Character then
+                    HightLightPlayer(Player)
+                end
+                Player.CharacterAdded:Connect(function(Character)
+                    HightLightPlayer(Player)
+                end)
+            end
+            
+            for _, Player in ipairs(Players:GetPlayers()) do
+                HightLightFunc(Player)
+            end
+            
+            Players.PlayerAdded:Connect(function(Player)
+                HightLightFunc(Player)
+            end)
+        else
+            -- Disable ESP
+            for _, Player in ipairs(Players:GetPlayers()) do
+                local Character = Player.Character
+                if Character then
+                    local highlight = Character:FindFirstChildOfClass("Highlight")
+                    if highlight then
+                        highlight:Remove()
+                    end
+                end
+            end
         end
-    end)
-end
-
-HightLightFunc = function(Player)
-    if Player.Character then
-        HightLightPlayer(Player)
-    end
-    Player.CharacterAdded:Connect(function()
-        HightLightPlayer(Player)
-    end)
-end
-
-local Players = game:GetService("Players")
-for _, PLayer in next, Players:GetPlayers() do
-    HightLightFunc(PLayer)
-end
-Players.PlayerAdded:Connect(function(Player)
-    HightLightFunc(Player)
-end)
-   end,
+    end,
 })
+
+
+
+
+
 
 local Button2 = Tab11:CreateButton({
    Name = "Expand Head Hitbox",
@@ -896,6 +942,85 @@ end
    end,
 })
 
+local Button = MainTab:CreateButton({
+   Name = "Show Full Chat",
+   Callback = function()
+--[[
+	Simple Chat Spy
+	Type "spy" to enable or disable the chat spy.
+	Only tested if this works executed with Synapse (should work with other exploits though)
+--]]
+
+
+
+-- Config
+Config = {
+	enabled = true,
+	spyOnMyself = true,
+	public = false,
+	publicItalics = true
+}
+
+-- Customizing Log Output
+PrivateProperties = {
+	Color = Color3.fromRGB(0,255,255); 
+	Font = Enum.Font.SourceSansBold;
+	TextSize = 18;
+}
+
+	local StarterGui = game:GetService("StarterGui")
+	local Players = game:GetService("Players")
+	local player = Players.LocalPlayer
+	local saymsg = game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest")
+	local getmsg = game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("OnMessageDoneFiltering")
+	local instance = (_G.chatSpyInstance or 0) + 1
+	_G.chatSpyInstance = instance
+
+	local function onChatted(p,msg)
+		if _G.chatSpyInstance == instance then
+			if p==player and msg:lower():sub(1,4)=="/spy" then
+				Config.enabled = not Config.enabled
+				wait(0.3)
+				PrivateProperties.Text = "{SPY "..(Config.enabled and "EN" or "DIS").."ABLED}"
+				StarterGui:SetCore("ChatMakeSystemMessage", PrivateProperties)
+			elseif Config.enabled and (Config.spyOnMyself==true or p~=player) then
+				msg = msg:gsub("[\n\r]",''):gsub("\t",' '):gsub("[ ]+",' ')
+				local hidden = true
+				local conn = getmsg.OnClientEvent:Connect(function(packet,channel)
+					if packet.SpeakerUserId==p.UserId and packet.Message==msg:sub(#msg-#packet.Message+1) and (channel=="All" or (channel=="Team" and Config.public==false and Players[packet.FromSpeaker].Team==player.Team)) then
+						hidden = false
+					end
+				end)
+				wait(1)
+				conn:Disconnect()
+				if hidden and Config.enabled then
+					if Config.public then
+						saymsg:FireServer((Config.publicItalics and "/me " or '').."{SPY} [".. p.Name .."]: "..msg,"All")
+					else
+						PrivateProperties.Text = "{SPY} [".. p.Name .."]: "..msg
+						StarterGui:SetCore("ChatMakeSystemMessage", PrivateProperties)
+					end
+				end
+			end
+		end
+	end
+	
+	for _,p in ipairs(Players:GetPlayers()) do
+		p.Chatted:Connect(function(msg) onChatted(p,msg) end)
+	end
+
+	Players.PlayerAdded:Connect(function(p)
+		p.Chatted:Connect(function(msg) onChatted(p,msg) end)
+	end)
+
+	PrivateProperties.Text = "{SPY "..(Config.enabled and "EN" or "DIS").."ABLED}"
+	StarterGui:SetCore("ChatMakeSystemMessage", PrivateProperties)
+	local chatFrame = player.PlayerGui.Chat.Frame
+	chatFrame.ChatChannelParentFrame.Visible = true
+	chatFrame.ChatBarParentFrame.Position = chatFrame.ChatChannelParentFrame.Position+UDim2.new(UDim.new(),chatFrame.ChatChannelParentFrame.Size.Y)
+   end,
+})
+
 local Section = MainTab:CreateSection("Hacks")
 
 local Button = MainTab:CreateButton({
@@ -1303,3 +1428,4 @@ local Button = CreditsTab:CreateButton({
    toclipboard("discord.gg/bakr9")
    end,
 })
+
