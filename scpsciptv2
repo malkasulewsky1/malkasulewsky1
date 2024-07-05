@@ -6,7 +6,7 @@ local Window = Rayfield:CreateWindow({
    LoadingSubtitle = "Made By RoScripts Ultimate",
    ConfigurationSaving = {
       Enabled = false,
-      FolderName = nil, -- Create a custom folder for your hub/game
+      FolderName = nil, -- Create a custom folder for your hub/gam
       FileName = "E39SCPB"
    },
    Discord = {
