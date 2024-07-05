@@ -14,7 +14,7 @@ local Window = Rayfield:CreateWindow({
       Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
       RememberJoins = true -- Set this to false to make them join the discord every time they load it up
    },
-   KeySystem = true, -- Set this to true to use our key system
+   KeySystem = false, -- Set this to true to use our key system
    KeySettings = {
       Title = "SCP Roleplay Script",
       Subtitle = "https://discord.gg/Cd3B4fYsZB",
@@ -161,6 +161,63 @@ _G.FullBrightEnabled = not _G.FullBrightEnabled
 
 local Tab22 = Window:CreateTab("Teleports", 4483362458) -- Title, Image
 local Section = Tab22:CreateSection(" ")
+
+local Input = Tab22:CreateInput({
+    Name = "Teleport To Player",
+    PlaceholderText = "Name",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(Text)
+        -- Variables for services and player
+        local TweenService = game:GetService("TweenService")
+        local Players = game:GetService("Players")
+        local player = Players.LocalPlayer
+
+        -- Function to teleport to a specific player
+        local function teleportToPlayer(targetPlayerName)
+            -- Get the target player
+            local targetPlayer = Players:FindFirstChild(targetPlayerName)
+            if not targetPlayer then
+                warn("Player not found: " .. targetPlayerName)
+                return
+            end
+
+            -- Get the character and humanoid root part of both players
+            local targetCharacter = targetPlayer.Character
+            local targetRootPart = targetCharacter and targetCharacter:FindFirstChild("HumanoidRootPart")
+            local playerCharacter = player.Character
+            local playerRootPart = playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart")
+
+            if not targetRootPart or not playerRootPart then
+                warn("Could not find HumanoidRootPart for one or both players")
+                return
+            end
+
+            -- Create a tween to move the player to the target player
+            local tweenInfo = TweenInfo.new(
+                0, -- Time in seconds
+                Enum.EasingStyle.Quad, -- Easing style
+                Enum.EasingDirection.Out, -- Easing direction
+                0, -- Number of times to repeat
+                false, -- Should it reverse?
+                0 -- Delay time before the tween starts
+            )
+            
+            local goal = {}
+            goal.CFrame = targetRootPart.CFrame
+            
+            local tween = TweenService:Create(playerRootPart, tweenInfo, goal)
+            
+            -- Start the tween
+            tween:Play()
+            
+            -- Optionally, you can wait for the tween to complete
+            tween.Completed:Wait()
+        end
+
+        -- Call teleportToPlayer with the text input
+        teleportToPlayer(Text)
+    end,
+})
 
 local Button = Tab22:CreateButton({
    Name = "Class D Cells",
@@ -942,7 +999,7 @@ end
    end,
 })
 
-local Button = MainTab:CreateButton({
+local Button = Tab11:CreateButton({
    Name = "Show Full Chat",
    Callback = function()
 --[[
@@ -1455,3 +1512,5 @@ rejoinServer()
 
    end,
 })
+
+
