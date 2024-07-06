@@ -5,7 +5,7 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-       Name = "SCP Roleplay Script Made By RoScripts Ultimate",
+       Name = "Roscripts Hub SCP Roleplay",
    LoadingTitle = "SCP Roleplay Script",
    LoadingSubtitle = "Made By RoScripts Ultimate",
    ConfigurationSaving = {
