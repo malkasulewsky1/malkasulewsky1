@@ -18,7 +18,7 @@ local Window = Rayfield:CreateWindow({
       Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
       RememberJoins = true -- Set this to false to make them join the discord every time they load it up
    },
-   KeySystem = true, -- Set this to true to use our key system
+   KeySystem = false, -- Set this to true to use our key system
    KeySettings = {
       Title = "SCP Roleplay Script",
       Subtitle = "https://discord.gg/Cd3B4fYsZB",
@@ -443,12 +443,11 @@ local Toggle = Tab11:CreateToggle({
     CurrentValue = false,
     Flag = "Toggle1",
     Callback = function(Value)
-        local HighlightPlayer
         local Players = game:GetService("Players")
         local LocalPlayer = Players.LocalPlayer
-        local espEnabled = true
+        local espEnabled = Value
 
-        HighlightPlayer = function(Player)
+        local function HighlightPlayer(Player)
             if Player == LocalPlayer then return end -- Skip the local player
 
             local Character = Player.Character or Player.CharacterAdded:Wait()
@@ -480,10 +479,20 @@ local Toggle = Tab11:CreateToggle({
             spawn(applyESP)
 
             Players.PlayerAdded:Connect(function(Player)
-                Player.CharacterAdded:Connect(function(Character)
+                Player.CharacterAdded:Connect(function()
                     HighlightPlayer(Player)
                 end)
             end)
+
+            -- Apply ESP to all current players
+            for _, Player in ipairs(Players:GetPlayers()) do
+                Player.CharacterAdded:Connect(function()
+                    HighlightPlayer(Player)
+                end)
+                if Player.Character then
+                    HighlightPlayer(Player)
+                end
+            end
         else
             -- Disable ESP
             espEnabled = false
@@ -499,6 +508,10 @@ local Toggle = Tab11:CreateToggle({
         end
     end,
 })
+
+
+
+
 
 
 
