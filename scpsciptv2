@@ -443,53 +443,64 @@ local Toggle = Tab11:CreateToggle({
     CurrentValue = false,
     Flag = "Toggle1",
     Callback = function(Value)
-        local HightLightPlayer
-        local HightLightFunc
+        local HighlightPlayer
         local Players = game:GetService("Players")
-        
+        local LocalPlayer = Players.LocalPlayer
+        local espEnabled = true
+
+        HighlightPlayer = function(Player)
+            if Player == LocalPlayer then return end -- Skip the local player
+
+            local Character = Player.Character or Player.CharacterAdded:Wait()
+            local Humanoid = Character:WaitForChild("Humanoid")
+            local Highlighter = Character:FindFirstChildOfClass("Highlight")
+
+            if not Highlighter then
+                Highlighter = Instance.new("Highlight", Character)
+                Highlighter.FillColor = (Player.TeamColor and Player.TeamColor.Color) or Color3.fromRGB(255, 48, 51)
+
+                Humanoid.Died:Connect(function()
+                    Highlighter:Destroy()
+                end)
+            end
+        end
+
+        local function applyESP()
+            while espEnabled do
+                for _, Player in ipairs(Players:GetPlayers()) do
+                    HighlightPlayer(Player)
+                end
+                wait(5)
+            end
+        end
+
         if Value then
             -- Enable ESP
-            HightLightPlayer = function(Player)
-                local Character = Player.Character or Player.CharacterAdded:Wait()
-                local Humanoid = Character:WaitForChild("Humanoid")
-                local HightLighter = Instance.new("Highlight", Character)
-                HightLighter.FillColor = (Player.TeamColor and Player.TeamColor.Color) or Color3.fromRGB(255, 48, 51)
-                
-                Humanoid.Died:Connect(function()
-                    HightLighter:Remove()
-                end)
-            end
-            
-            HightLightFunc = function(Player)
-                if Player.Character then
-                    HightLightPlayer(Player)
-                end
-                Player.CharacterAdded:Connect(function(Character)
-                    HightLightPlayer(Player)
-                end)
-            end
-            
-            for _, Player in ipairs(Players:GetPlayers()) do
-                HightLightFunc(Player)
-            end
-            
+            espEnabled = true
+            spawn(applyESP)
+
             Players.PlayerAdded:Connect(function(Player)
-                HightLightFunc(Player)
+                Player.CharacterAdded:Connect(function(Character)
+                    HighlightPlayer(Player)
+                end)
             end)
         else
             -- Disable ESP
+            espEnabled = false
             for _, Player in ipairs(Players:GetPlayers()) do
                 local Character = Player.Character
                 if Character then
                     local highlight = Character:FindFirstChildOfClass("Highlight")
                     if highlight then
-                        highlight:Remove()
+                        highlight:Destroy()
                     end
                 end
             end
         end
     end,
 })
+
+
 
 
 
@@ -1529,4 +1540,3 @@ local Slider = MiscTab:CreateSlider({
 setfpscap(Value)
    end,
 })
-
