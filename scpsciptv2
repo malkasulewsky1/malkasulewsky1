@@ -1439,7 +1439,7 @@ rejoinServer()
    end,
 })
 
-local Button = MainTab:CreateButton({
+local Button = MiscTab:CreateButton({
    Name = "Show Full Chat",
    Callback = function()
 --[[
