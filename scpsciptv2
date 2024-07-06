@@ -1518,4 +1518,15 @@ PrivateProperties = {
    end,
 })
 
+local Slider = MiscTab:CreateSlider({
+   Name = "FPS Limit",
+   Range = {10, 360},
+   Increment = 10,
+   Suffix = "FPS",
+   CurrentValue = 60,
+   Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Value)
+setfpscap(Value)
+   end,
+})
 
